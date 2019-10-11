@@ -60,6 +60,23 @@ public:
 		return m_physicalDevice->GetPhysicalDeviceHandle();
 	}
 
+	std::shared_ptr<InstanceVk> GetVkInstanceWrapper()
+	{
+		return m_instance;
+	}
+
+	std::shared_ptr<const InstanceVk> GetVkInstanceWrapper()const
+	{
+		return m_instance;
+	}
+
+	const PhysicalDeviceVk &GetPhysicalDeviceVk() const
+	{
+		return *m_physicalDevice;
+	}
+
+	
+
 	ITexture *CreateTextureFromVkImage( VkImage vkImage, const TextureDesc &desc ) override
 	{
 		return nullptr;

@@ -11,19 +11,19 @@ namespace fx
 namespace vkwrapper
 {
 
-std::unique_ptr<PhysicalDeviceVk> PhysicalDeviceVk::CreatePhysicalDevice( VkPhysicalDevice device )
+std::unique_ptr<VkPhysicalDeviceWrapper> VkPhysicalDeviceWrapper::CreatePhysicalDevice( VkPhysicalDevice device )
 {
-	auto pDev = new PhysicalDeviceVk( device );
+	auto pDev = new VkPhysicalDeviceWrapper( device );
 	
-	return std::unique_ptr<PhysicalDeviceVk>( pDev );
+	return std::unique_ptr<VkPhysicalDeviceWrapper>( pDev );
 }
 
-VkPhysicalDevice PhysicalDeviceVk::GetPhysicalDeviceHandle() const
+VkPhysicalDevice VkPhysicalDeviceWrapper::GetPhysicalDeviceNativeHandle() const
 {
 	return m_device;
 }
 
-uint32_t PhysicalDeviceVk::FindMemoryType( uint32_t typeFilter, VkMemoryPropertyFlags properties )const
+uint32_t VkPhysicalDeviceWrapper::FindMemoryType( uint32_t typeFilter, VkMemoryPropertyFlags properties )const
 {
 
 	for ( uint32_t i = 0; i < i < m_memoryProperties.memoryTypeCount; i++ ) 
@@ -37,7 +37,7 @@ uint32_t PhysicalDeviceVk::FindMemoryType( uint32_t typeFilter, VkMemoryProperty
 	throw std::runtime_error( "failed to find suitable memory type!" );
 }
 
-uint32_t PhysicalDeviceVk::FindQueueFamily( VkQueueFlags QueueFlags ) const
+uint32_t VkPhysicalDeviceWrapper::FindQueueFamily( VkQueueFlags QueueFlags ) const
 {
 	for ( auto i = 0; i < m_queueFamiliyProperties.size(); i++ ) {
 		const auto &que = m_queueFamiliyProperties[ i ];
@@ -57,7 +57,7 @@ uint32_t PhysicalDeviceVk::FindQueueFamily( VkQueueFlags QueueFlags ) const
 	return VK_DEVICE_QUEUE_CREATE_FLAG_BITS_MAX_ENUM;
 }
 
-PhysicalDeviceVk::PhysicalDeviceVk( VkPhysicalDevice device ):m_device( device )
+VkPhysicalDeviceWrapper::VkPhysicalDeviceWrapper( VkPhysicalDevice device ):m_device( device )
 {
 	
 	vkGetPhysicalDeviceProperties( m_device, &m_properties );

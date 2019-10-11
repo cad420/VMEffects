@@ -66,7 +66,7 @@ static std::vector<const char *> GetRequiredExtensions()
 	return extensions;
 }
 
-InstanceVk::~InstanceVk()
+InstanceVkWrapper::~InstanceVkWrapper()
 {
 	if ( enableValidationLayers ) {
 		DestroyDebugUtilsMessengerEXT( m_instance, m_callback, nullptr );
@@ -74,18 +74,18 @@ InstanceVk::~InstanceVk()
 	vkDestroyInstance( m_instance, nullptr );
 }
 
-std::shared_ptr<InstanceVk> InstanceVk::CreateInstance()
+std::shared_ptr<InstanceVkWrapper> InstanceVkWrapper::CreateInstance()
 {
-	auto pIns = new InstanceVk();
-	return std::shared_ptr<InstanceVk>(pIns);
+	auto pIns = new InstanceVkWrapper();
+	return std::shared_ptr<InstanceVkWrapper>(pIns);
 }
 
-VkInstance InstanceVk::GetVkInstance()
+VkInstance InstanceVkWrapper::GetVkInstanceNativeHandle()
 {
 	return m_instance;
 }
 
-VkPhysicalDevice InstanceVk::GetAPhysicalDevice()
+VkPhysicalDevice InstanceVkWrapper::GetAPhysicalDevice()
 {
 	VkPhysicalDevice device = nullptr;
 	for ( const auto &d : m_physicalDevices ) {
@@ -98,7 +98,7 @@ VkPhysicalDevice InstanceVk::GetAPhysicalDevice()
 	return device;
 }
 
-InstanceVk::InstanceVk()
+InstanceVkWrapper::InstanceVkWrapper()
 {
 	if ( !glfwInit() ) {
 		throw std::runtime_error( "failed to init glfw" );
@@ -159,7 +159,7 @@ InstanceVk::InstanceVk()
 	vkEnumeratePhysicalDevices( m_instance, &dc, m_physicalDevices.data() );
 }
 
-void InstanceVk::SetupDebugCallback()
+void InstanceVkWrapper::SetupDebugCallback()
 {
 	if ( enableValidationLayers == false ) {
 		return;
@@ -181,7 +181,7 @@ void InstanceVk::SetupDebugCallback()
 	}
 }
 
-VkResult InstanceVk::CreateDebugUtilsMessengerEXT( VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkDebugUtilsMessengerEXT *pCallback )
+VkResult InstanceVkWrapper::CreateDebugUtilsMessengerEXT( VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkDebugUtilsMessengerEXT *pCallback )
 {
 	auto func = (PFN_vkCreateDebugUtilsMessengerEXT)
 	  vkGetInstanceProcAddr( instance,
@@ -193,7 +193,7 @@ VkResult InstanceVk::CreateDebugUtilsMessengerEXT( VkInstance instance, const Vk
 	}
 }
 
-void InstanceVk::DestroyDebugUtilsMessengerEXT( VkInstance instance, VkDebugUtilsMessengerEXT callback, const VkAllocationCallbacks *pAllocator )
+void InstanceVkWrapper::DestroyDebugUtilsMessengerEXT( VkInstance instance, VkDebugUtilsMessengerEXT callback, const VkAllocationCallbacks *pAllocator )
 {
 	auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)
 	  vkGetInstanceProcAddr( instance,
@@ -203,7 +203,7 @@ void InstanceVk::DestroyDebugUtilsMessengerEXT( VkInstance instance, VkDebugUtil
 	}
 }
 
-VkBool32 InstanceVk::debugCallback( VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData, void *pUserData )
+VkBool32 InstanceVkWrapper::debugCallback( VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData, void *pUserData )
 {
 	//std::cerr << "validation layer: " << pCallbackData->pMessage
 	//	<< std::endl;
@@ -217,7 +217,7 @@ VkBool32 InstanceVk::debugCallback( VkDebugUtilsMessageSeverityFlagBitsEXT messa
 	return VK_FALSE;
 }
 
-bool InstanceVk::IsRequired( VkPhysicalDevice device )
+bool InstanceVkWrapper::IsRequired( VkPhysicalDevice device )
 {
 	// queue family support
 	uint32_t queueFamilyCount = 0;
@@ -259,7 +259,7 @@ bool InstanceVk::IsRequired( VkPhysicalDevice device )
 	return m_queueFamilyIndex.isComplete() && extension;
 }
 
-bool InstanceVk::CheckExtensionSupport( VkPhysicalDevice device )
+bool InstanceVkWrapper::CheckExtensionSupport( VkPhysicalDevice device )
 {
 	uint32_t extensionCount;
 	vkEnumerateDeviceExtensionProperties( device, nullptr, &extensionCount, nullptr );

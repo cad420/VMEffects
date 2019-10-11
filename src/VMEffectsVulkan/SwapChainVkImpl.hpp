@@ -6,6 +6,8 @@
 #include <VMEffectsVulkan/ISwapChinaVk.h>
 #include <SwapChainImpl.hpp>
 #include <VMUtils/log.hpp>
+#include <GLFW/glfw3.h>
+
 #include "DeviceVkImpl.hpp"
 #include "ContextVkImpl.hpp"
 
@@ -16,14 +18,12 @@ namespace fx
 class SwapChainVkImpl : public SwapChain<ISwapChainVk>
 {
 public:
-	SwapChainVkImpl( IRefCnt *cnt, const SwapChainDesc &desc, DeviceVkImpl *device, void *reservedNativeWindowHandle ) :
-	  SwapChain<ISwapChainVk>( cnt )
-	{
-		bool swapChainAdquate = false;
-		const auto swapChainSupport = querySwapChainSupport( device->GetVkPhysicalDevice());
-		swapChainAdquate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
+	SwapChainVkImpl( IRefCnt *cnt,
+	                 const SwapChainDesc &desc,
+	                 DeviceVkImpl *device,
+					 ContextVkImpl * context,
+	                 void *reservedNativeWindowHandle );
 
-	}
 	void Present( uint32_t interval ) override
 	{
 		Warning( "Present(uint32_t interval) is not implement" );
@@ -74,11 +74,12 @@ private:
 		return details;
 	}
 
-
+	GLFWwindow * m_window = nullptr;
 	
-
 	VkSurfaceKHR m_surface = VK_NULL_HANDLE;
 	VkSwapchainKHR m_swapChain = VK_NULL_HANDLE;
+	
+	
 };
 }  // namespace fx
 }  // namespace vm

@@ -14,12 +14,12 @@ template <typename Interface>
 class SwapChain : public EverythingBase<Interface>
 {
 public:
-	SwapChain( IRefCnt *cnt ):EverythingBase<Interface>( cnt )
+	SwapChain( IRefCnt *cnt ,IDevice * device,IContext * context):EverythingBase<Interface>( cnt ),m_device( device ),m_context( context )
 	{}
 	~SwapChain() = default;
 private:
 	Ref<IDevice> m_device;
-	IContext * m_context;		// weak reference temporary
+	IContext * m_context = nullptr;		// weak reference temporary
 };
 
 }  // namespace fx

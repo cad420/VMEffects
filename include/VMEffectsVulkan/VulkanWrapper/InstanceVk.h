@@ -14,18 +14,18 @@ namespace fx
 {
 namespace vkwrapper
 {
-class InstanceVk final : public std::enable_shared_from_this<InstanceVk>,
+class InstanceVkWrapper final : public std::enable_shared_from_this<InstanceVkWrapper>,
 						 vm::NoCopy,
 						 vm::NoMove
 {
 public:
-	~InstanceVk();
-	static std::shared_ptr<InstanceVk> CreateInstance();
-	VkInstance GetVkInstance();
+	~InstanceVkWrapper();
+	static std::shared_ptr<InstanceVkWrapper> CreateInstance();
+	VkInstance GetVkInstanceHandle();
 	VkPhysicalDevice GetAPhysicalDevice();
 
 private:
-	InstanceVk();
+	InstanceVkWrapper();
 	void SetupDebugCallback();
 	static VkResult CreateDebugUtilsMessengerEXT(
 	  VkInstance instance,

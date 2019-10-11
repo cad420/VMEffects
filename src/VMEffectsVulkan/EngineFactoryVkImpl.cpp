@@ -69,8 +69,12 @@ void EngineFactoryVkImpl::CreateDeviceAndContexts( const EngineVkDesc &engineDes
 	*context = pCtx;
 }
 
-ISwapChain *EngineFactoryVkImpl::CreateSwapChainVk( IDevice *device, IContext *context, void *nativeWindowHandle, const SwapChainDesc &desc )
+ISwapChain *EngineFactoryVkImpl::CreateSwapChainVk( IDevice *device,
+	IContext *context, 
+	void *nativeWindowHandle,
+	const SwapChainDesc &desc )
 {
+	
 	return nullptr;
 }
 
