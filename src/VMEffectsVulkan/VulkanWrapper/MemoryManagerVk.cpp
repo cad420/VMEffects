@@ -7,7 +7,10 @@ namespace fx
 {
 namespace vkwrapper
 {
-
+void VulkanMemoryHeap::Free( MemoryAllocation alloc )
+{
+	
+}
 }
 }
 }

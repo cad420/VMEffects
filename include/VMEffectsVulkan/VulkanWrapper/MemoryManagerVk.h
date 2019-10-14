@@ -4,62 +4,65 @@
 //#include "LogicalDevickVk.h"
 #include "PhysicalDeviceVk.h"
 #include <VMEffectsVulkan/VulkanWrapper/VulkanObjectWrapper.h>
-
 namespace vm
 {
 namespace fx
 {
 namespace vkwrapper
 {
-class MemoryManagerVk;
-class MemoryPage;
+class VulkanMemoryArena;
 
-class MemoryAllocationVk : vm::NoCopy
+class VulkanMemoryHeap;
+
+class MemoryAllocation : vm::NoCopy
 {
 public:
-	MemoryAllocationVk() = default;
-	MemoryAllocationVk( MemoryPage *page,
+	MemoryAllocation() = default;
+	MemoryAllocation( VulkanMemoryHeap *page,
 						VkDeviceSize size,
 						VkDeviceSize offset ) :
-	  m_page( page ),
+	  m_heap( page ),
 	  m_size( size ),
 	  m_offset( offset ) {}
 
-	MemoryAllocationVk( MemoryAllocationVk &&alloc ) noexcept :
-	  m_page( alloc.m_page ),
+	MemoryAllocation( MemoryAllocation &&alloc ) noexcept :
+	  m_heap( alloc.m_heap ),
 	  m_size( alloc.m_size ),
 	  m_offset( alloc.m_offset )
 	{
-		alloc.m_page = nullptr;
+		alloc.m_heap = nullptr;
 		alloc.m_size = 0;
 		alloc.m_offset = 0;
 	}
 
-	MemoryAllocationVk &operator=( MemoryAllocationVk &&alloc ) noexcept
+	MemoryAllocation &operator=( MemoryAllocation &&alloc ) noexcept
 	{
-		m_page = alloc.m_page;
+		m_heap = alloc.m_heap;
 		m_size = alloc.m_size;
 		m_offset = alloc.m_offset;
 
-		alloc.m_page = nullptr;
+		alloc.m_heap = nullptr;
 		alloc.m_size = 0;
 		alloc.m_offset = 0;
 
 		return *this;
 	}
 
-	~MemoryAllocationVk() = default;
+	VulkanMemoryHeap * GetHeap() { return m_heap; }
+	const VulkanMemoryHeap *GetHeap() const { return m_heap; }
+	
+	~MemoryAllocation() = default;
 
 private:
-	MemoryPage *m_page = nullptr;
+	VulkanMemoryHeap *m_heap = nullptr;
 	VkDeviceSize m_offset = 0;
 	VkDeviceSize m_size = 0;
 };
 
-class MemoryPage : NoCopy
+class VulkanMemoryHeap : NoCopy
 {
 public:
-	MemoryPage( MemoryManagerVk &memMgr,
+	VulkanMemoryHeap( VulkanMemoryArena &memMgr,
 				VkDeviceSize size,
 				uint32_t memoryTypeIndex,
 				bool hostVisible ) :
@@ -67,7 +70,7 @@ public:
 	{
 	}
 
-	MemoryPage( MemoryPage &&page ) noexcept :
+	VulkanMemoryHeap( VulkanMemoryHeap &&page ) noexcept :
 	  m_memMgr( page.m_memMgr ),
 	  m_gpuMemory( std::move( page.m_gpuMemory ) ),
 	  m_cpuMemory( page.m_cpuMemory )
@@ -75,7 +78,7 @@ public:
 		page.m_cpuMemory = nullptr;
 	}
 
-	MemoryPage &operator=( MemoryPage && ) = delete;
+	VulkanMemoryHeap &operator=( VulkanMemoryHeap && ) = delete;
 
 	bool Empty() const {}
 	bool Full() const {}
@@ -83,34 +86,34 @@ public:
 	VkDeviceSize GetUsedSize() const
 	{
 	}
-	MemoryAllocationVk Allocate( VkDeviceSize size, VkDeviceSize alignment );
+	MemoryAllocation Allocate( VkDeviceSize size, VkDeviceSize alignment );
 
 	VkDeviceMemory GetGPUMemory() const { return m_gpuMemory; }
 	void *GetCPUMemory() const { return m_cpuMemory; }
 
 private:
-	friend class MemoryAllocationVk;
-	void Free( MemoryAllocationVk alloc );
-	MemoryManagerVk &m_memMgr;
+	friend class MemoryAllocation;
+	void Free( MemoryAllocation alloc );
+	VulkanMemoryArena &m_memMgr;
 	std::mutex m_mtx;
+	ysl::Memory
 	VkDeviceMemoryWrapper m_gpuMemory;
 	void *m_cpuMemory = nullptr;
 };
 
-class MemoryManagerVk
+class VulkanMemoryArena
 {
 public:
-	MemoryManagerVk( const VkLogicalDeviceWrapper &logicalDevice,
+	VulkanMemoryArena( const VkLogicalDeviceWrapper &logicalDevice,
 					 const VkPhysicalDeviceWrapper &physicalDevice,
 					 VkDeviceSize localPageSize,
 					 VkDeviceSize hostVisiblePageSize,
 					 VkDeviceSize localReserveSize,
 					 VkDeviceSize hostVisibleReserveSize );
-	~MemoryManagerVk();
+	~VulkanMemoryArena();
 
-	MemoryAllocationVk Allocate( VkDeviceSize size, VkDeviceSize alignment, uint32_t memoryTypeIndex, bool hostVisible );
-	;
-	MemoryAllocationVk Allocate( const VkMemoryRequirements &req, VkMemoryPropertyFlags flags );
+	MemoryAllocation Allocate( VkDeviceSize size, VkDeviceSize alignment, uint32_t memoryTypeIndex, bool hostVisible );
+	MemoryAllocation Allocate( const VkMemoryRequirements &req, VkMemoryPropertyFlags flags );
 
 private:
 };
