@@ -11,10 +11,10 @@ namespace fx
 template<typename Interface,typename DeviceType>
 class DeviceObject : public EverythingBase<Interface>
 {
-	DeviceType * const m_device = nullptr;
 public:
 	DeviceObject( IRefCnt *cnt ,DeviceType * device):EverythingBase<Interface>( cnt ),m_device( device ) {}
-	
+protected:
+	DeviceType * const m_device = nullptr;
 };
 }
 }

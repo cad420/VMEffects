@@ -16,9 +16,9 @@ class DeviceVkImpl : public Device<IDeviceVk>
 {
 public:
 	DeviceVkImpl( IRefCnt *cnt,
-				  std::shared_ptr<InstanceVk> instance,
-				  std::unique_ptr<PhysicalDeviceVk> physicalDevice,
-				  std::shared_ptr<LogicalDeviceVk> logicalDevice,
+				  std::shared_ptr<InstanceVkWrapper> instance,
+				  std::unique_ptr<VkPhysicalDeviceWrapper> physicalDevice,
+				  std::shared_ptr<VkLogicalDeviceWrapper> logicalDevice,
 				  void *reservedAllocator ) :
 	  Device<IDeviceVk>( cnt ),
 	  m_instance( std::move( instance ) ),
@@ -52,27 +52,32 @@ public:
 
 	VkDevice GetVkDeviceHandle() override
 	{
-		return m_logicalDevice->GetVkDevice();
+		return m_logicalDevice->GetVkDeviceNativeHandle();
 	}
 
 	VkPhysicalDevice GetVkPhysicalDevice() override
 	{
-		return m_physicalDevice->GetPhysicalDeviceHandle();
+		return m_physicalDevice->GetPhysicalDeviceNativeHandle();
 	}
 
-	std::shared_ptr<InstanceVk> GetVkInstanceWrapper()
+	std::shared_ptr<InstanceVkWrapper> GetVkInstanceWrapper()
 	{
 		return m_instance;
 	}
 
-	std::shared_ptr<const InstanceVk> GetVkInstanceWrapper()const
+	std::shared_ptr<const InstanceVkWrapper> GetVkInstanceWrapper()const
 	{
 		return m_instance;
 	}
 
-	const PhysicalDeviceVk &GetPhysicalDeviceVk() const
+	const VkPhysicalDeviceWrapper &GetPhysicalDeviceVk() const
 	{
 		return *m_physicalDevice;
+	}
+
+	const VkLogicalDeviceWrapper &GetLogicalDeviceVk() const
+	{
+		return *m_logicalDevice;
 	}
 
 	
@@ -89,9 +94,9 @@ public:
 
 	
 private:
-	std::shared_ptr<InstanceVk> m_instance;
-	std::unique_ptr<PhysicalDeviceVk> m_physicalDevice;
-	std::shared_ptr<LogicalDeviceVk> m_logicalDevice;
+	std::shared_ptr<InstanceVkWrapper> m_instance;
+	std::unique_ptr<VkPhysicalDeviceWrapper> m_physicalDevice;
+	std::shared_ptr<VkLogicalDeviceWrapper> m_logicalDevice;
 };
 }  // namespace fx
 }  // namespace vm

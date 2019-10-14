@@ -10,6 +10,10 @@ SwapChainVkImpl::SwapChainVkImpl( IRefCnt *cnt, const SwapChainDesc &desc, Devic
 								  void *reservedNativeWindowHandle ) :
   SwapChain<ISwapChainVk>( cnt,device,context )
 {
+
+	(void)reservedNativeWindowHandle;
+
+	
 	bool swapChainAdquate = false;
 	const auto swapChainSupport = querySwapChainSupport( device->GetVkPhysicalDevice() );
 	swapChainAdquate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
@@ -38,6 +42,16 @@ SwapChainVkImpl::SwapChainVkImpl( IRefCnt *cnt, const SwapChainDesc &desc, Devic
 	// [2] Create SwapChain
 	
 
+	
+}
+
+ITextureView * SwapChainVkImpl::GetCurrentFramebuffer()
+{
+
+}
+
+ITextureView * SwapChainVkImpl::GetDepthBuffer()
+{
 	
 }
 }  // namespace fx

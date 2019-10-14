@@ -14,6 +14,8 @@ public:
 	virtual VkDevice GetVkDeviceHandle() = 0;
 
 	virtual VkPhysicalDevice GetVkPhysicalDevice() = 0;
+
+	
 	
 	virtual ITexture *CreateTextureFromVkImage( VkImage vkImage, const TextureDesc &desc ) = 0;
 	

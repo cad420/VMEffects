@@ -21,7 +21,7 @@ class InstanceVkWrapper final : public std::enable_shared_from_this<InstanceVkWr
 public:
 	~InstanceVkWrapper();
 	static std::shared_ptr<InstanceVkWrapper> CreateInstance();
-	VkInstance GetVkInstanceHandle();
+	VkInstance GetVkInstanceNativeHandle();
 	VkPhysicalDevice GetAPhysicalDevice();
 
 private:

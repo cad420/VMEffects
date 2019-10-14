@@ -16,11 +16,11 @@ void EngineFactoryVkImpl::CreateDeviceAndContexts( const EngineVkDesc &engineDes
 {
 	using namespace vkwrapper;
 
-	auto instance = InstanceVk::CreateInstance();
+	auto instance = InstanceVkWrapper::CreateInstance();
 
 	// Create VkPhysicalDevice
 	const auto physicalDeviceHandle = instance->GetAPhysicalDevice();
-	auto physicalDeviceVk = PhysicalDeviceVk::CreatePhysicalDevice( physicalDeviceHandle );
+	auto physicalDeviceVk = VkPhysicalDeviceWrapper::CreatePhysicalDevice( physicalDeviceHandle );
 
 	// Create Logical Device
 	std::set<uint32_t> queueFamilies = { physicalDeviceVk->FindQueueFamily( VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT ) };
@@ -58,7 +58,7 @@ void EngineFactoryVkImpl::CreateDeviceAndContexts( const EngineVkDesc &engineDes
 		&requiredFeatures
 	};
 
-	auto logicalDeviceVk = LogicalDeviceVk::CreateLogicalDevice( physicalDeviceHandle, deviceCreateInfo, nullptr );
+	auto logicalDeviceVk = VkLogicalDeviceWrapper::CreateLogicalDevice( physicalDeviceHandle, deviceCreateInfo, nullptr );
 
 	auto pDev = VM_NEW<DeviceVkImpl>( instance, 
 		std::move( physicalDeviceVk ), 

@@ -19,10 +19,10 @@ class SwapChainVkImpl : public SwapChain<ISwapChainVk>
 {
 public:
 	SwapChainVkImpl( IRefCnt *cnt,
-	                 const SwapChainDesc &desc,
-	                 DeviceVkImpl *device,
-					 ContextVkImpl * context,
-	                 void *reservedNativeWindowHandle );
+					 const SwapChainDesc &desc,
+					 DeviceVkImpl *device,
+					 ContextVkImpl *context,
+					 void *reservedNativeWindowHandle );
 
 	void Present( uint32_t interval ) override
 	{
@@ -32,13 +32,17 @@ public:
 	{
 		Warning( "Resize( uint32_t w, uint32_t h ) is not implement" );
 	}
+
+	ITextureView *GetCurrentFramebuffer() override;
+
+	ITextureView *GetDepthBuffer() override;
+
 	VkSwapchainKHR GetVkSwapChain() override
 	{
 		return m_swapChain;
 	}
 
 private:
-	
 	struct SwapChainSupportDetails
 	{
 		VkSurfaceCapabilitiesKHR capabilities;
@@ -46,7 +50,7 @@ private:
 		std::vector<VkPresentModeKHR> presentModes;
 	};
 
-	SwapChainSupportDetails querySwapChainSupport( VkPhysicalDevice device )const
+	SwapChainSupportDetails querySwapChainSupport( VkPhysicalDevice device ) const
 	{
 		SwapChainSupportDetails details;
 
@@ -74,12 +78,15 @@ private:
 		return details;
 	}
 
-	GLFWwindow * m_window = nullptr;
-	
+	GLFWwindow *m_window = nullptr;
+
 	VkSurfaceKHR m_surface = VK_NULL_HANDLE;
+
 	VkSwapchainKHR m_swapChain = VK_NULL_HANDLE;
-	
-	
+
+	std::shared_ptr<vkwrapper::InstanceVkWrapper> m_instance;
+
+	uint32_t m_currentImageIndex = 0;
 };
 }  // namespace fx
 }  // namespace vm

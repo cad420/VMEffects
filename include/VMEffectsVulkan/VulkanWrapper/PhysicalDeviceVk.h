@@ -11,16 +11,16 @@ namespace fx
 {
 namespace vkwrapper
 {
-class PhysicalDeviceVk : NoMove, NoCopy
+class VkPhysicalDeviceWrapper : NoMove, NoCopy
 {
 public:
-	static std::unique_ptr<PhysicalDeviceVk> CreatePhysicalDevice( VkPhysicalDevice device );
-	VkPhysicalDevice GetPhysicalDeviceHandle() const;
+	static std::unique_ptr<VkPhysicalDeviceWrapper> CreatePhysicalDevice( VkPhysicalDevice device );
+	VkPhysicalDevice GetPhysicalDeviceNativeHandle() const;
 	uint32_t FindMemoryType( uint32_t typeFilter, VkMemoryPropertyFlags properties )const;
 	uint32_t FindQueueFamily( VkQueueFlags QueueFlags ) const;
 private :
 
-	  PhysicalDeviceVk( VkPhysicalDevice device );
+	  VkPhysicalDeviceWrapper( VkPhysicalDevice device );
 
 	const VkPhysicalDevice m_device = VK_NULL_HANDLE;
 	VkPhysicalDeviceProperties m_properties = {};

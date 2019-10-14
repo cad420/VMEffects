@@ -1,13 +1,13 @@
 
 #pragma once
 #include "IDeviceObject.h"
-#include "IBuffer.h"
 
 namespace vm
 {
 namespace fx
 {
 
+class IBuffer;
 
 struct BufferFormat
 {
@@ -23,7 +23,10 @@ struct BufferViewDesc
 class IBufferView : public IDeviceObject
 {
 public:
-	virtual IBuffer *GetBuffer() = 0;
+
+	virtual IBuffer * GetBuffer() = 0;
+
+	virtual const BufferViewDesc &GetDesc() = 0;
 };
 
 

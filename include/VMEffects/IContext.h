@@ -3,7 +3,7 @@
 
 #include <VMUtils/ieverything.hpp>
 
-#include "BasicType.h"
+#include "EngineType.h"
 #include <VMEffects/ICommandList.h>
 #include <VMEffects/ISwapChain.h>
 #include <VMEffects/IPipeline.h>
@@ -20,7 +20,7 @@ struct DrawDesc
 {
 	bool IsIndexed = false;
 	uint32_t Count = 0;
-	ValueType IndexType = VM_VT_UINT32;
+	EValueType IndexType = VM_VT_UINT32;
 	uint32_t InstanceCount = 1;
 	
 };

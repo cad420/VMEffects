@@ -1,5 +1,5 @@
 
-#include "BufferVkImpl.hpp"
+#include "BufferBase.hpp"
 
 namespace vm
 {
