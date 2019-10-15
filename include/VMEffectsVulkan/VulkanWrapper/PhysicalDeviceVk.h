@@ -20,7 +20,7 @@ public:
 	uint32_t FindQueueFamily( VkQueueFlags QueueFlags ) const;
 private :
 
-	  VkPhysicalDeviceWrapper( VkPhysicalDevice device );
+	VkPhysicalDeviceWrapper( VkPhysicalDevice device );
 
 	const VkPhysicalDevice m_device = VK_NULL_HANDLE;
 	VkPhysicalDeviceProperties m_properties = {};

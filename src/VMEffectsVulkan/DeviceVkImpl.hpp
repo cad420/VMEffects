@@ -2,10 +2,12 @@
 #pragma once
 
 #include <VMEffectsVulkan/IDeviceVk.h>
+#include <VMEffectsVulkan/IEngineFactoryVk.h>
 #include <VMEffectsVulkan/VulkanWrapper/InstanceVk.h>
 #include <VMEffectsVulkan/VulkanWrapper/LogicalDevickVk.h>
 #include <VMEffectsVulkan/VulkanWrapper/PhysicalDeviceVk.h>
 #include <DeviceBase.hpp>
+#include "CommandPoolManager.hpp"
 
 namespace vm
 {
@@ -16,14 +18,11 @@ class DeviceVkImpl : public Device<IDeviceVk>
 {
 public:
 	DeviceVkImpl( IRefCnt *cnt,
-				  std::shared_ptr<InstanceVkWrapper> instance,
-				  std::unique_ptr<VkPhysicalDeviceWrapper> physicalDevice,
-				  std::shared_ptr<VkLogicalDeviceWrapper> logicalDevice,
-				  void *reservedAllocator ) :
-	  Device<IDeviceVk>( cnt ),
-	  m_instance( std::move( instance ) ),
-	  m_physicalDevice( std::move( physicalDevice ) ),
-	  m_logicalDevice( std::move( logicalDevice ) ) {}
+	              const EngineVkDesc &engineDesc,
+	              std::shared_ptr<InstanceVkWrapper> instance,
+	              std::unique_ptr<VkPhysicalDeviceWrapper> physicalDevice,
+	              std::shared_ptr<VkLogicalDeviceWrapper> logicalDevice,
+	              void *reservedAllocator );
 
 	IShader *CreateShader( const ShaderDesc &desc ) override
 	{
@@ -50,6 +49,11 @@ public:
 		return nullptr;
 	}
 
+	void AllocateTransientCommandPool( VkCommandPoolWrapper &cmdPool, VkCommandBuffer &cmdBuff, const char *dbgInfo )
+	{
+		
+	}
+
 	VkDevice GetVkDeviceHandle() override
 	{
 		return m_logicalDevice->GetVkDeviceNativeHandle();
@@ -65,7 +69,7 @@ public:
 		return m_instance;
 	}
 
-	std::shared_ptr<const InstanceVkWrapper> GetVkInstanceWrapper()const
+	std::shared_ptr<const InstanceVkWrapper> GetVkInstanceWrapper() const
 	{
 		return m_instance;
 	}
@@ -80,8 +84,6 @@ public:
 		return *m_logicalDevice;
 	}
 
-	
-
 	ITexture *CreateTextureFromVkImage( VkImage vkImage, const TextureDesc &desc ) override
 	{
 		return nullptr;
@@ -92,11 +94,21 @@ public:
 		return nullptr;
 	}
 
-	
+	MemoryAllocation AllocateMemory( const VkMemoryRequirements &req, VkMemoryPropertyFlags flags )
+	{
+		return m_deviceMemoryManager.Allocate( req, flags );
+	}
+
 private:
 	std::shared_ptr<InstanceVkWrapper> m_instance;
 	std::unique_ptr<VkPhysicalDeviceWrapper> m_physicalDevice;
 	std::shared_ptr<VkLogicalDeviceWrapper> m_logicalDevice;
+	VulkanMemoryArena m_deviceMemoryManager;
+
+
+	// used to copy buffer and texture
+	CommandPoolManager m_transientCmdPoolManager;
+	
 };
 }  // namespace fx
 }  // namespace vm

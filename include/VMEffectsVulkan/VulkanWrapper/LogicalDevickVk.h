@@ -3,6 +3,7 @@
 #include <memory>
 #include <vulkan/vulkan.h>
 #include <VMUtils/log.hpp>
+#include <VMEffectsVulkan/VulkanWrapper/MemoryManagerVk.h>
 #include <stdexcept>
 
 namespace vm
@@ -19,6 +20,8 @@ using VkImageViewWrapper = VkObjectWrapper<VkImageView>;
 using VkBufferWrapper = VkObjectWrapper<VkBuffer>;
 using VkBufferViewWrapper = VkObjectWrapper<VkBufferView>;
 using VkDeviceMemoryWrapper = VkObjectWrapper<VkDeviceMemory>;
+using VkCommandPoolWrapper = VkObjectWrapper<VkCommandPool>;
+using VkFenceWrapper = VkObjectWrapper<VkFence>;
 
 class VkLogicalDeviceWrapper : public std::enable_shared_from_this<VkLogicalDeviceWrapper>
 {
@@ -27,7 +30,7 @@ public:
 																		const VkDeviceCreateInfo &,
 																		VkAllocationCallbacks *allocator );
 	VkDevice GetVkDeviceNativeHandle();
-	VkQueue GetQueue( uint32_t queueFamilyIndex ) const;
+	VkQueue GetQueue( uint32_t queueFamilyIndex, uint32_t queueIndex ) const;
 	~VkLogicalDeviceWrapper();
 
 	template <typename VulkanObjectType, typename CreateFuncName, typename CreateInfoType>
@@ -58,15 +61,34 @@ public:
 	VkBufferViewWrapper CreateVkBufferView( const VkBufferViewCreateInfo &createInfo, const char *dbgInfo ) const;
 	void ReleaseVkObject( VkBufferViewWrapper &&vkBufferViewWrapper ) const;
 
-	VkMemoryRequirements GetImageMemoryRequirements( VkImage image )const;
+	VkFenceWrapper CreateFence( const VkFenceCreateInfo &createInfo, const char *dbgInfo ) const;
+	void ReleaseVkObject( VkFenceWrapper &&vk_fence_wrapper ) const;
 
+	VkCommandPoolWrapper CreateCommandPool( const VkCommandPoolCreateInfo &createInfo, const char *dbgInfo )const;
+
+	VkResult ResetCommandPool( VkCommandPool cmdPool, VkCommandPoolResetFlags flags ) const;
+
+	VkMemoryRequirements GetImageMemoryRequirements( VkImage image )const;
 	VkMemoryRequirements GetBufferMemoryRRequirements( VkBuffer buffer)const;
+
+	VkResult BindBufferMemory( VkBuffer buffer, VkDeviceMemory memory, VkDeviceSize offset ) const;
+	VkResult BindImageMemory( VkImage image, VkDeviceMemory memory, VkDeviceSize offset ) const;
+
+	VkDeviceMemoryWrapper AllocateDeviceMemory( const VkMemoryAllocateInfo &allocInfo, const char *dbgInfo )const;
+	VkCommandBuffer AllocateCommandBuffer( const VkCommandBufferAllocateInfo &allocInfo, const char *dbgInfo ) const;
+
+	VkResult ResetFence( VkFence fence ) const;
+
+	VkResult MapMemory( VkDeviceMemory devMemory, VkDeviceSize size, VkDeviceSize offset, VkMemoryMapFlags flags, void **data ) const;
+	void UnmapMemory( VkDeviceMemory devMemory ) const;
 
 private:
 	VkLogicalDeviceWrapper( VkPhysicalDevice device, const VkDeviceCreateInfo &ci, VkAllocationCallbacks *allocator );
 
 	VkDevice m_device = VK_NULL_HANDLE;
 	VkAllocationCallbacks *m_allocator = nullptr;
+	VkMemoryPropertyFlags m_memoryProperties;
+	VulkanMemoryArena m_deviceManager;
 };
 
 }  // namespace vkwrapper

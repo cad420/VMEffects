@@ -1,5 +1,7 @@
 
 #include "EngineFactoryVkImpl.hpp"
+//#include <VMEffectsVulkan/IEngineFactoryVk.h>
+#include "VMUtils/vmnew.hpp"
 
 namespace vm
 {
@@ -12,7 +14,9 @@ EngineFactoryVkImpl::EngineFactoryVkImpl( IRefCnt *cnt ) :
 {
 }
 
-void EngineFactoryVkImpl::CreateDeviceAndContexts( const EngineVkDesc &engineDesc, IDevice **device, IContext **context )
+void EngineFactoryVkImpl::CreateDeviceAndContexts( const EngineVkDesc &engineDesc,
+												   IDevice **device,
+												   IContext **context )
 {
 	using namespace vkwrapper;
 
@@ -60,21 +64,21 @@ void EngineFactoryVkImpl::CreateDeviceAndContexts( const EngineVkDesc &engineDes
 
 	auto logicalDeviceVk = VkLogicalDeviceWrapper::CreateLogicalDevice( physicalDeviceHandle, deviceCreateInfo, nullptr );
 
-	auto pDev = VM_NEW<DeviceVkImpl>( instance, 
-		std::move( physicalDeviceVk ), 
-		logicalDeviceVk ,nullptr);
-	auto pCtx = VM_NEW<ContextVkImpl>( pDev );
+	auto pDev = VM_NEW<DeviceVkImpl>( engineDesc,
+									  instance,
+									  std::move( physicalDeviceVk ),
+									  logicalDeviceVk, nullptr );
+	auto pCtx = VM_NEW<ContextVkImpl>( pDev, engineDesc );
 
 	*device = pDev;
 	*context = pCtx;
 }
 
 ISwapChain *EngineFactoryVkImpl::CreateSwapChainVk( IDevice *device,
-	IContext *context, 
-	void *nativeWindowHandle,
-	const SwapChainDesc &desc )
+													IContext *context,
+													void *nativeWindowHandle,
+													const SwapChainDesc &desc )
 {
-	
 	return nullptr;
 }
 
@@ -83,7 +87,7 @@ std::vector<std::string> VulkanEngineFactory_PluginFactory::Keys() const
 	return { "Vulkan" };
 }
 
-::vm::IEverything * VulkanEngineFactory_PluginFactory::Create( const std::string &key )
+::vm::IEverything *VulkanEngineFactory_PluginFactory::Create( const std::string &key )
 {
 	return VM_NEW<EngineFactoryVkImpl>();
 }

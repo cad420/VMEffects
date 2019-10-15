@@ -21,7 +21,8 @@ VkDevice VkLogicalDeviceWrapper::GetVkDeviceNativeHandle()
 	return m_device;
 }
 
-VkQueue VkLogicalDeviceWrapper::GetQueue( uint32_t queueFamilyIndex ) const
+VkQueue VkLogicalDeviceWrapper::GetQueue( uint32_t queueFamilyIndex, 
+	uint32_t queueIndex ) const
 {
 	VkQueue queue;
 	vkGetDeviceQueue( m_device, queueFamilyIndex, 0, &queue );
@@ -78,6 +79,29 @@ void VkLogicalDeviceWrapper::ReleaseVkObject( VkBufferViewWrapper &&vkBufferView
 	vkBufferViewWrapper.m_object = VK_NULL_HANDLE;
 }
 
+VkFenceWrapper VkLogicalDeviceWrapper::CreateFence( const VkFenceCreateInfo &createInfo, const char *dbgInfo ) const
+{
+	return CreateVkObject<VkFence>( vkCreateFence, createInfo, dbgInfo );
+}
+
+void VkLogicalDeviceWrapper::ReleaseVkObject( VkFenceWrapper &&vk_fence_wrapper ) const
+{
+}
+
+VkCommandPoolWrapper VkLogicalDeviceWrapper::CreateCommandPool( const VkCommandPoolCreateInfo &createInfo, const char *dbgInfo )const
+{
+	return CreateVkObject<VkCommandPool>( vkCreateCommandPool, createInfo, dbgInfo );
+}
+
+VkResult VkLogicalDeviceWrapper::ResetCommandPool( VkCommandPool cmdPool, VkCommandPoolResetFlags flags ) const
+{
+	auto res = vkResetCommandPool( m_device, cmdPool, flags );
+	if ( res != VK_SUCCESS ) {
+		throw std::runtime_error( "Failed to reset command pool" );
+	}
+	return res;
+}
+
 VkMemoryRequirements VkLogicalDeviceWrapper::GetImageMemoryRequirements( VkImage image )const
 {
 	VkMemoryRequirements req = {};
@@ -92,7 +116,60 @@ VkMemoryRequirements VkLogicalDeviceWrapper::GetBufferMemoryRRequirements( VkBuf
 	return req;
 }
 
-VkLogicalDeviceWrapper::VkLogicalDeviceWrapper( VkPhysicalDevice device, const VkDeviceCreateInfo &ci, VkAllocationCallbacks *allocator ) :
+VkResult VkLogicalDeviceWrapper::BindBufferMemory( VkBuffer buffer, VkDeviceMemory memory, VkDeviceSize offset ) const
+{
+	return vkBindBufferMemory( m_device, buffer, memory, offset );
+}
+
+VkResult VkLogicalDeviceWrapper::BindImageMemory( VkImage image, VkDeviceMemory memory, VkDeviceSize offset ) const
+{
+	return vkBindImageMemory( m_device, image, memory, offset );
+}
+
+VkDeviceMemoryWrapper VkLogicalDeviceWrapper::AllocateDeviceMemory( const VkMemoryAllocateInfo &allocInfo, const char *dbgInfo )const
+{
+	VkDeviceMemory deviceMemory = VK_NULL_HANDLE;
+	auto res = vkAllocateMemory( m_device, &allocInfo, m_allocator, &deviceMemory );
+	if ( res != VK_SUCCESS ) 
+	{
+		throw std::runtime_error( "Failed to allocate device memory\n" );
+	}
+	return VkDeviceMemoryWrapper( shared_from_this(), std::move( deviceMemory ) );
+}
+
+VkCommandBuffer VkLogicalDeviceWrapper::AllocateCommandBuffer( const VkCommandBufferAllocateInfo &allocInfo, const char *dbgInfo ) const
+{
+	VkCommandBuffer buffer;
+	auto res = vkAllocateCommandBuffers( m_device, &allocInfo, &buffer );
+	if ( res != VK_SUCCESS ) {
+		throw std::runtime_error( "Failed to allocate command buffer" );
+	}
+	return buffer;
+}
+
+VkResult VkLogicalDeviceWrapper::ResetFence( VkFence fence ) const
+{
+	const auto res = vkResetFences( m_device, 1, &fence );
+	if ( res != VK_SUCCESS ) {
+		throw std::runtime_error( "Failed to reset fence" );
+	}
+	return res;
+}
+
+VkResult VkLogicalDeviceWrapper::MapMemory( VkDeviceMemory devMemory, VkDeviceSize size, VkDeviceSize offset, VkMemoryMapFlags flags, void **data ) const
+{
+	return vkMapMemory( m_device, devMemory, offset, size, flags, data );
+}
+
+void VkLogicalDeviceWrapper::UnmapMemory( VkDeviceMemory devMemory ) const
+{
+	vkUnmapMemory( m_device, devMemory );
+}
+
+
+VkLogicalDeviceWrapper::VkLogicalDeviceWrapper( VkPhysicalDevice device,
+	const VkDeviceCreateInfo &ci, 
+	VkAllocationCallbacks *allocator ) :
   m_allocator( allocator )
 {
 	auto res = vkCreateDevice( device, &ci, m_allocator, &m_device );

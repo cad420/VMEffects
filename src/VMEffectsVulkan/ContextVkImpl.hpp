@@ -15,7 +15,7 @@ namespace fx
 class ContextVkImpl : public ContextBase<IContextVk, DeviceVkImpl>
 {
 public:
-	ContextVkImpl( IRefCnt *cnt ,DeviceVkImpl * device) :
+	ContextVkImpl( IRefCnt *cnt ,DeviceVkImpl * device,const EngineVkDesc & engineDesc) :
 	  ContextBase<vm::fx::IContextVk, vm::fx::DeviceVkImpl>( cnt ,device) {}
 	void SetPipeline( IPipeline *pipline ) override
 	{

@@ -1,6 +1,6 @@
 
 #pragma once
-
+#include "EngineType.h"
 #include "IDeviceObject.h"
 #include "IBufferView.h"
 

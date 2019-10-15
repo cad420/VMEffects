@@ -1,12 +1,8 @@
 
 #pragma once
 
-#include <VMEffectsVulkan/IEngineFactoryVk.h>
-#include <VMUtils/vmnew.hpp>
 #include <VMEffectsVulkan/VulkanWrapper/InstanceVk.h>
-#include <VMEffectsVulkan/VulkanWrapper/PhysicalDeviceVk.h>
 #include <VMUtils/log.hpp>
-
 #include "ContextVkImpl.hpp"
 
 namespace vm

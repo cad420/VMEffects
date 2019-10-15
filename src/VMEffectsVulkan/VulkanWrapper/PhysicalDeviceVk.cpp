@@ -13,7 +13,7 @@ namespace vkwrapper
 
 std::unique_ptr<VkPhysicalDeviceWrapper> VkPhysicalDeviceWrapper::CreatePhysicalDevice( VkPhysicalDevice device )
 {
-	auto pDev = new VkPhysicalDeviceWrapper( device );
+	const auto pDev = new VkPhysicalDeviceWrapper( device );
 	
 	return std::unique_ptr<VkPhysicalDeviceWrapper>( pDev );
 }

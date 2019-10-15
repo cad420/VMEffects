@@ -14,6 +14,16 @@ namespace fx
 
 struct EngineVkDesc
 {
+	bool EnableValidation = false;
+	uint32_t ExtensionCount = 0;
+	const char *const *ExtensionNames = nullptr;
+	void *VkAllocator = nullptr;
+
+	uint64_t DeviceLocalMemoryHeapSize = 16 << 20;
+	uint64_t HostVisibleMemoryHeapSize = 16 << 20;
+	uint64_t DeviceLocalMemoryReserveSize = 256 << 20;
+	uint64_t HostVisibleMemoryReserveSize = 256 << 20;
+	
 };
 
 class IEngineFactoryVk : public IEngineFactory
