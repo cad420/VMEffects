@@ -3,6 +3,7 @@
 #include "IDeviceObject.h"
 #include "ITextureView.h"
 #include "EngineType.h"
+#include "IBuffer.h"
 
 namespace vm
 {
@@ -50,6 +51,7 @@ struct TextureDesc
 struct TextureResource
 {
 	const void *DataPtr = nullptr;
+
 	IBuffer *DataBuffer = nullptr;
 	uint64_t Offset = 0;
 	uint64_t Column = 0;

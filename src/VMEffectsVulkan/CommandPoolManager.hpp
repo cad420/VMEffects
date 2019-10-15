@@ -1,16 +1,15 @@
 
 #pragma once
 
-#include "DeviceVkImpl.hpp"
 #include <VMEffectsVulkan/VulkanWrapper/LogicalDevickVk.h>
-#include <VMEffectsVulkan/VulkanWrapper/VulkanObjectWrapper.h>
 #include <deque>
-
 
 namespace vm
 {
 namespace fx
 {
+class DeviceVkImpl;
+using namespace vkwrapper;
 class CommandPoolManager:NoCopy,NoMove
 {
 public:
@@ -27,7 +26,7 @@ public:
 	void DestroyPools();
 
 private:
-	DeviceVkImpl &m_device;
+	DeviceVkImpl & m_device;
 	const uint32_t m_queueFamilyIndex;
 	const VkCommandPoolCreateFlags m_flags;
 	std::mutex m_mtx;

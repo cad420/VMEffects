@@ -6,8 +6,8 @@
 #include <VMEffectsVulkan/IFenceVk.h>
 #include "DeviceVkImpl.hpp"
 #include <VMEffectsVulkan/VulkanWrapper/LogicalDevickVk.h>
-#include <VMEffectsVulkan/VulkanWrapper/VulkanObjectWrapper.h>
 #include <VMEffectsVulkan/VulkanWrapper/VulkanFencePool.h>
+#include <deque>
 
 namespace vm
 {
@@ -42,6 +42,6 @@ private:
 	std::deque<std::pair<uint64_t, VkFenceWrapper>> m_pendingFences;
 	volatile uint64_t m_lastCompletedFenceValue = 0;
 };
-
+//
 }  // namespace fx
 }  // namespace vm

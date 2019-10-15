@@ -20,7 +20,8 @@ vm::fx::DeviceVkImpl::DeviceVkImpl( IRefCnt *cnt,
 						 engineDesc.DeviceLocalMemoryHeapSize,
 						 engineDesc.HostVisibleMemoryHeapSize,
 						 engineDesc.DeviceLocalMemoryReserveSize,
-						 engineDesc.HostVisibleMemoryReserveSize ),m_transientCmdPoolManager(  )
+						 engineDesc.HostVisibleMemoryReserveSize ),m_transientCmdPoolManager( *this,0,0 )
+
 {
 }
 

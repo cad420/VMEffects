@@ -86,6 +86,20 @@ VkFenceWrapper VkLogicalDeviceWrapper::CreateFence( const VkFenceCreateInfo &cre
 
 void VkLogicalDeviceWrapper::ReleaseVkObject( VkFenceWrapper &&vk_fence_wrapper ) const
 {
+	vkDestroyFence( m_device, vk_fence_wrapper, m_allocator );
+	vk_fence_wrapper.m_object = VK_NULL_HANDLE;
+}
+
+void VkLogicalDeviceWrapper::ReleaseVkObject( VkCommandPoolWrapper &&vkCommandPoolWrapper ) const
+{
+	vkDestroyCommandPool( m_device, vkCommandPoolWrapper.m_object, m_allocator );
+	vkCommandPoolWrapper.m_object = VK_NULL_HANDLE;
+}
+
+void VkLogicalDeviceWrapper::ReleaseVkObject( VkDeviceMemoryWrapper &&vkDeviceMemoryWrapper )const
+{
+	vkFreeMemory( m_device, vkDeviceMemoryWrapper.m_object, m_allocator );
+	vkDeviceMemoryWrapper.m_object = VK_NULL_HANDLE;
 }
 
 VkCommandPoolWrapper VkLogicalDeviceWrapper::CreateCommandPool( const VkCommandPoolCreateInfo &createInfo, const char *dbgInfo )const

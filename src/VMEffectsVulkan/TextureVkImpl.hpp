@@ -21,7 +21,7 @@ public:
 
 	ITextureView *CreateTextureView( const TextureViewDesc &desc ) override final
 	{
-		
+		return nullptr;
 	}
 
 	void * GetNativeHandle() override final
@@ -40,6 +40,7 @@ public:
 
 	VkImageLayout GetImageLayout() override final
 	{
+		return VkImageLayout{};
 	}
 
 	~TextureVkImpl();

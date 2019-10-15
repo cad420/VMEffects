@@ -21,7 +21,7 @@ struct TextureViewDesc
 	union
 	{
 		uint32_t ArrayCount = 0;
-		uint32_t DepthCount = 0;
+		uint32_t DepthCount;
 	};
 
 	TextureViewDesc() = default;

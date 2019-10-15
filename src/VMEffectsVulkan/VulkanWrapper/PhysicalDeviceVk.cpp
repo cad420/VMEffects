@@ -1,6 +1,5 @@
 
 #include <VMEffectsVulkan/VulkanWrapper/PhysicalDeviceVk.h>
-#include <exception>
 #include <VMUtils/log.hpp>
 #include <set>
 

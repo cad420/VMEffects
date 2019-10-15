@@ -47,12 +47,12 @@ SwapChainVkImpl::SwapChainVkImpl( IRefCnt *cnt, const SwapChainDesc &desc, Devic
 
 ITextureView * SwapChainVkImpl::GetCurrentFramebuffer()
 {
-
+	return nullptr;
 }
 
 ITextureView * SwapChainVkImpl::GetDepthBuffer()
 {
-	
+	return nullptr;
 }
 }  // namespace fx
 }  // namespace vm

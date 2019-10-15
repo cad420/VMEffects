@@ -1,9 +1,8 @@
 
 #pragma once
 
-//#include "LogicalDevickVk.h"
 #include "PhysicalDeviceVk.h"
-#include <VMEffectsVulkan/VulkanWrapper/VulkanObjectWrapper.h>
+#include "LogicalDevickVk.h"
 #include <VMFoundation/memoryallocationtracker.h>
 
 namespace vm
@@ -84,7 +83,7 @@ public:
 class VulkanMemoryHeap : NoCopy
 {
 public:
-	VulkanMemoryHeap( VulkanMemoryArena & memMgr,
+    VulkanMemoryHeap( VulkanMemoryArena & memMgr,
 					  VkDeviceSize size,
 					  uint32_t memoryTypeIndex,
 					  bool hostVisible );
@@ -97,8 +96,8 @@ public:
 	{
 		heap.m_cpuMemory = nullptr;
 	}
-
-	VulkanMemoryHeap &operator=( VulkanMemoryHeap && ) = delete;
+//
+    VulkanMemoryHeap &operator=( VulkanMemoryHeap && ) = delete;
 
 	bool IsEmpty() const { return m_tracker.IsEmpty(); }
 	bool IsFull() const { return m_tracker.IsFull(); }
@@ -111,8 +110,8 @@ public:
 		return m_tracker.GetUsedSize();
 	}
 	MemoryAllocation Allocate( VkDeviceSize size, VkDeviceSize alignment );
-
-	VkDeviceMemory GetGPUMemory() const { return m_gpuMemory; }
+//
+	VkDeviceMemory GetGPUMemory() const { return m_gpuMemory; }  // m_gpuMemory; }
 
 	void *GetCPUMemory() const { return m_cpuMemory; }
 
@@ -123,7 +122,7 @@ private:
 	void Free( MemoryAllocation alloc );
 	VulkanMemoryArena & m_memMgr;
 	std::mutex m_mtx;
-	ysl::MemoryAllocationTracker m_tracker;
+    ysl::MemoryAllocationTracker m_tracker;
 	VkDeviceMemoryWrapper m_gpuMemory;
 	void *m_cpuMemory = nullptr;
 };

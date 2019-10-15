@@ -2,7 +2,6 @@
 #pragma once
 #include <VMEffectsVulkan/ICommandQueueVk.h>
 #include <VMEffectsVulkan/VulkanWrapper/LogicalDevickVk.h>
-#include <VMUtils/ref.hpp>
 #include <memory>
 
 namespace vm
@@ -16,15 +15,15 @@ public:
 	CommandQueueVkImpl( IRefCnt *cnt,
 						std::shared_ptr<VkLogicalDeviceWrapper> logicalDevice,
 						uint32_t queueFamily );
-	~CommandQueueVkImpl()=default;
+	~CommandQueueVkImpl() = default;
 
 	uint64_t GetNextFence() override
 	{
-		
+		return 0;
 	}
 	uint64_t Submit( VkCommandBuffer cmdBuffer ) override
 	{
-		
+		return 0;
 	}
 	uint64_t Submit( const VkSubmitInfo &submitInfo ) override
 	{
@@ -33,39 +32,37 @@ public:
 
 		++m_nextFence;
 
-
+		return 0;
 	}
 	VkResult Present( const VkPresentInfoKHR &presentInfo ) override
 	{
-		
+		return VkResult{};
 	}
 
 	VkQueue GetVkQueue() override
 	{
-		
+		return VkQueue{};
 	}
 
 	uint32_t GetQueueFamilyIndex() override
 	{
-		
+		return 0;
 	}
 
 	uint64_t WaitForIdle() override
 	{
-		
+		return 0;
 	}
 
 	uint64_t GetCompletedFence() override
 	{
-		
+		return 0;
 	}
 
 	void SignalFence( VkFence fence ) override
 	{
-		
 	}
 
-	
 private:
 	std::shared_ptr<VkLogicalDeviceWrapper> m_logicalDevice;
 	const VkQueue m_queue;

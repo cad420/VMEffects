@@ -13,7 +13,7 @@ class FenceBase : DeviceObject<Interface, DeviceType>
 public:
 	FenceBase( IRefCnt *cnt, DeviceType *device ,const DescType & desc) :
 	  DeviceObject<Interface, DeviceType>( cnt, device ),m_desc( desc ) {}
-	const DescType &GetDesc() const override
+	const DescType &GetDesc() const
 	{
 		return m_desc;
 	}

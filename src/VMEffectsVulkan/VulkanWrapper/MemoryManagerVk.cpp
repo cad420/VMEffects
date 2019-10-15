@@ -25,7 +25,7 @@ VulkanMemoryHeap::VulkanMemoryHeap( VulkanMemoryArena &memMgr, VkDeviceSize size
 		}
 	}
 }
-
+//
 MemoryAllocation VulkanMemoryHeap::Allocate( VkDeviceSize size, VkDeviceSize alignment )
 {
 	std::lock_guard<std::mutex> lk( m_mtx );
@@ -35,7 +35,7 @@ MemoryAllocation VulkanMemoryHeap::Allocate( VkDeviceSize size, VkDeviceSize ali
 	}
 	return MemoryAllocation{};
 }
-
+//
 VulkanMemoryHeap::~VulkanMemoryHeap()
 {
 	if ( m_cpuMemory ) {

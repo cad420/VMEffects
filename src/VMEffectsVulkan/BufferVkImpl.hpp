@@ -49,9 +49,6 @@ public:
 			createInfo.usage |= VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
 		}
 
-		if ( desc.Usage = VM_USG_DYNAMIC ) {
-			
-		}
 		
 	}
 
@@ -74,7 +71,7 @@ public:
 
 private:
 	VkBufferWrapper m_buffer;
-	MemoryAllocation m_BufferMemoryInfo;
+	//MemoryAllocation m_BufferMemoryInfo;
 };
 }  // namespace fx
 }  // namespace vm

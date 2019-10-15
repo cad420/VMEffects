@@ -1,6 +1,6 @@
 
 #include "CommandPoolManager.hpp"
-
+#include "ContextVkImpl.hpp"
 namespace vm
 {
 namespace fx
@@ -22,7 +22,7 @@ VkCommandPoolWrapper CommandPoolManager::AllocateCommandPool( const char *dbgInf
 		cmdPool = std::move( m_cmdPools.front() );
 		m_cmdPools.pop_front();
 	}
-	auto &logicalDevice = m_device.GetLogicalDeviceVk();
+	const auto &logicalDevice = m_device.GetLogicalDeviceVk();
 	if ( cmdPool == VK_NULL_HANDLE ) {
 		VkCommandPoolCreateInfo createInfo = {};
 

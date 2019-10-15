@@ -13,6 +13,7 @@ CommandQueueVkImpl::CommandQueueVkImpl( IRefCnt *cnt, std::shared_ptr<VkLogicalD
   m_nextFence( 1 )
 {
 }
+//
 
 }  // namespace fx
 }  // namespace vm

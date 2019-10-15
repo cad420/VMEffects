@@ -21,8 +21,7 @@ FenceVkImpl::~FenceVkImpl()
 
 uint64_t FenceVkImpl::GetCompletedValue()
 {
-	const auto &logicalDevice = m_device->GetLogicalDeviceVk();
-
+	return 0;
 }
 
 void FenceVkImpl::Reset( uint64_t value )

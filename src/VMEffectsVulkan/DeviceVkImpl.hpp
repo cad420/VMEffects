@@ -7,8 +7,8 @@
 #include <VMEffectsVulkan/VulkanWrapper/LogicalDevickVk.h>
 #include <VMEffectsVulkan/VulkanWrapper/PhysicalDeviceVk.h>
 #include <DeviceBase.hpp>
+#include <VMEffectsVulkan/VulkanWrapper/MemoryManagerVk.h>
 #include "CommandPoolManager.hpp"
-
 namespace vm
 {
 namespace fx
@@ -107,6 +107,7 @@ private:
 
 
 	// used to copy buffer and texture
+
 	CommandPoolManager m_transientCmdPoolManager;
 	
 };

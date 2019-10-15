@@ -14,7 +14,7 @@ class TextureBase : public DeviceObject<Interface, DeviceType>
 public:
 	TextureBase( IRefCnt *cnt, DeviceType *device,const TextureDesc & desc ) :
 	  DeviceObject<Interface, DeviceType>( cnt, device ),m_desc( desc ) {}
-	const DescType & GetDesc() override final
+	const DescType & GetDesc()const
 	{
 		return m_desc;
 	}
