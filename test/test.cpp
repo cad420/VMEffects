@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <GLFW/glfw3.h>
+#include <VMUtils/ref.hpp>
 
 #include <VMEffectsVulkan/IEngineFactoryVk.h>
 #include <VMFoundation/pluginloader.h>
@@ -12,8 +13,10 @@
 int main()
 {
 	using namespace vm::fx;
-	ysl::PluginLoader::LoadPlugins( "backends" );
-	vm::Ref<vm::fx::IEngineFactoryVk> p = ysl::PluginLoader::GetPluginLoader()->CreatePlugin<vm::fx::IEngineFactoryVk>( "Vulkan" );
+	using namespace vm;
+	
+	PluginLoader::LoadPlugins( "backends" );
+	Ref<vm::fx::IEngineFactoryVk> p = PluginLoader::GetPluginLoader()->CreatePlugin<vm::fx::IEngineFactoryVk>( "Vulkan" );
 	if ( p ) {
 		IDevice *pDev =nullptr;
 		IContext *pCtx = nullptr;

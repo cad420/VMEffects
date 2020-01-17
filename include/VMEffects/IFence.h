@@ -8,8 +8,6 @@ namespace vm
 {
 namespace fx
 {
-
-
 struct FenceDesc
 {
 
@@ -24,5 +22,7 @@ public:
 
 	virtual void Reset( uint64_t value ) = 0;
 };
+
+
 }
 }
