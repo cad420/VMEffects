@@ -11,5 +11,6 @@ class IEngineFactory :public IEverything
 {
 	void QueryInterface( const InterfaceID &iid, IEverything **interface ) override = 0;
 };
+
 }
 }

@@ -122,7 +122,7 @@ private:
 	void Free( MemoryAllocation alloc );
 	VulkanMemoryArena & m_memMgr;
 	std::mutex m_mtx;
-    ysl::MemoryAllocationTracker m_tracker;
+    MemoryAllocationTracker m_tracker;
 	VkDeviceMemoryWrapper m_gpuMemory;
 	void *m_cpuMemory = nullptr;
 };

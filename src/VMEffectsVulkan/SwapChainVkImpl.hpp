@@ -3,7 +3,7 @@
 
 #include <vulkan/vulkan.h>
 
-#include <VMEffectsVulkan/ISwapChinaVk.h>
+#include <VMEffectsVulkan/ISwapChainVk.h>
 #include <SwapChainImpl.hpp>
 #include <VMUtils/log.hpp>
 #include <GLFW/glfw3.h>
@@ -15,7 +15,7 @@ namespace vm
 {
 namespace fx
 {
-class SwapChainVkImpl : public SwapChain<ISwapChainVk>
+class SwapChainVkImpl : public EverythingBase<ISwapChainVk>
 {
 public:
 	SwapChainVkImpl( IRefCnt *cnt,
@@ -78,14 +78,13 @@ private:
 		return details;
 	}
 
+	Ref<IDevice> m_device = nullptr;
+	WeakRef<IContext> m_context = nullptr;
+
 	GLFWwindow *m_window = nullptr;
-
 	VkSurfaceKHR m_surface = VK_NULL_HANDLE;
-
 	VkSwapchainKHR m_swapChain = VK_NULL_HANDLE;
-
 	std::shared_ptr<vkwrapper::InstanceVkWrapper> m_instance;
-
 	uint32_t m_currentImageIndex = 0;
 };
 }  // namespace fx

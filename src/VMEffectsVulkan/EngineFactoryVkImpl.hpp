@@ -35,15 +35,17 @@ private:
 };
 
 
-class VulkanEngineFactory_PluginFactory : public ysl::IPluginFactory
+}  // namespace fx
+}  // namespace vm
+
+class VulkanEngineFactory_PluginFactory : public vm::IPluginFactory
 {
 	DECLARE_PLUGIN_FACTORY( "VMEffects.Engine.Vulkan" )
 public:
 	std::vector<std::string> Keys() const override;
-	::vm::IEverything * Create( const std::string &key ) override;
+	vm::IEverything * Create( const std::string &key ) override;
 };
 
-}  // namespace fx
-}  // namespace vm
+VM_REGISTER_PLUGIN_FACTORY_DECL(VulkanEngineFactory_PluginFactory)
 
-EXPORT_PLUGIN_FACTORY( vm::fx::VulkanEngineFactory_PluginFactory )
+EXPORT_PLUGIN_FACTORY( VulkanEngineFactory_PluginFactory )

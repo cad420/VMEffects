@@ -19,7 +19,7 @@ public:
 	~SwapChain() = default;
 private:
 	Ref<IDevice> m_device;
-	IContext * m_context = nullptr;		// weak reference temporary
+	WeakRef<IContext> m_context;
 };
 
 }  // namespace fx

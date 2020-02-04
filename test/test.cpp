@@ -16,13 +16,18 @@ int main()
 	using namespace vm;
 	
 	PluginLoader::LoadPlugins( "backends" );
-	Ref<vm::fx::IEngineFactoryVk> p = PluginLoader::GetPluginLoader()->CreatePlugin<vm::fx::IEngineFactoryVk>( "Vulkan" );
-	if ( p ) {
+	Ref<IEngineFactoryVk> p = PluginLoader::GetPluginLoader()->CreatePlugin<IEngineFactoryVk>( "Vulkan" );
+	if ( p ) 
+	{
 		IDevice *pDev =nullptr;
 		IContext *pCtx = nullptr;
 		EngineVkDesc desc;
+		SwapChainDesc swapChainDesc;
+		swapChainDesc.Width = 1024;
+		swapChainDesc.Height = 768;
 		p->CreateDeviceAndContexts( desc, &pDev, &pCtx );
+		p->CreateSwapChainVk( pDev, pCtx, nullptr, swapChainDesc );
 	}
-	
+
 	return 0;
 }

@@ -15,8 +15,8 @@ EngineFactoryVkImpl::EngineFactoryVkImpl( IRefCnt *cnt ) :
 }
 
 void EngineFactoryVkImpl::CreateDeviceAndContexts( const EngineVkDesc &engineDesc,
-												   IDevice **device,
-												   IContext **context )
+												   IDevice ** device,
+												   IContext ** context )
 {
 	using namespace vkwrapper;
 
@@ -31,7 +31,8 @@ void EngineFactoryVkImpl::CreateDeviceAndContexts( const EngineVkDesc &engineDes
 
 	std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
 
-	for ( const auto &index : queueFamilies ) {
+	for ( const auto &index : queueFamilies ) 
+	{
 		VkDeviceQueueCreateInfo queueCreateInfo = {};
 		queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
 		queueCreateInfo.queueFamilyIndex = index;
@@ -40,7 +41,7 @@ void EngineFactoryVkImpl::CreateDeviceAndContexts( const EngineVkDesc &engineDes
 		queueCreateInfo.pQueuePriorities = &quePriority;
 		queueCreateInfos.push_back( queueCreateInfo );
 	}
-	//
+
 	// Setup device features
 	VkPhysicalDeviceFeatures supportFeatures;
 	VkPhysicalDeviceFeatures requiredFeatures = {};
@@ -82,6 +83,13 @@ ISwapChain *EngineFactoryVkImpl::CreateSwapChainVk( IDevice *device,
 	return nullptr;
 }
 
+
+
+}  // namespace fx
+}  // namespace vm
+
+
+
 std::vector<std::string> VulkanEngineFactory_PluginFactory::Keys() const
 {
 	return { "Vulkan" };
@@ -89,10 +97,9 @@ std::vector<std::string> VulkanEngineFactory_PluginFactory::Keys() const
 
 ::vm::IEverything *VulkanEngineFactory_PluginFactory::Create( const std::string &key )
 {
-	return VM_NEW<EngineFactoryVkImpl>();
+	return VM_NEW<vm::fx::EngineFactoryVkImpl>();
 }
 
-}  // namespace fx
-}  // namespace vm
+VM_REGISTER_PLUGIN_FACTORY_IMPL(VulkanEngineFactory_PluginFactory)
 
-EXPORT_PLUGIN_FACTORY_IMPLEMENT( vm::fx::VulkanEngineFactory_PluginFactory )
+EXPORT_PLUGIN_FACTORY_IMPLEMENT( VulkanEngineFactory_PluginFactory )

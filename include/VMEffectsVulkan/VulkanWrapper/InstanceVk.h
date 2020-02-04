@@ -15,8 +15,8 @@ namespace fx
 namespace vkwrapper
 {
 class InstanceVkWrapper final : public std::enable_shared_from_this<InstanceVkWrapper>,
-						 vm::NoCopy,
-						 vm::NoMove
+								NoCopy,
+								NoMove
 {
 public:
 	~InstanceVkWrapper();
