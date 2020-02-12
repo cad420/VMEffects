@@ -12,6 +12,7 @@ class IBufferView;
 
 struct BufferDesc
 {
+	const char * Info = nullptr;
 	uint32_t BufferSize = 0;
 	BindFlags BindFlag = VM_BT_UNKNOWN;
 	EUsage Usage = VM_USG_DEFAULT;
@@ -19,12 +20,14 @@ struct BufferDesc
 	EBufferMode Mode = VM_BM_UNKNOWN;
 	uint64_t CommandQueueMask = 0;
 	BufferDesc(
+	  const char * info ,
 	  uint32_t bufferSize,
 	  BindFlags bindFlag,
 	  EUsage usage,
 	  CPUAccessFlags cpuAccessFlag,
 	  EBufferMode mode,
 	  uint64_t commandQueueMask ) :
+	  Info(info),
 	  BufferSize( bufferSize ),
 	  BindFlag( bindFlag ),
 	  Usage( usage ),

@@ -6,12 +6,12 @@ namespace vm
 {
 namespace fx
 {
-vkwrapper::MyVkFencePool::MyVkFencePool( std::shared_ptr<const VkLogicalDeviceWrapper> logicalDevice ) :
+vkwrapper::FenceArena::FenceArena( std::shared_ptr<const VkLogicalDeviceWrapper> logicalDevice ) :
   m_logicalDevice( std::move( logicalDevice ) )
 {
 }
 
-vkwrapper::VkFenceWrapper vkwrapper::MyVkFencePool::GetFence()
+vkwrapper::VkFenceWrapper vkwrapper::FenceArena::GetFence()
 {
 	VkFenceWrapper fence;
 	if ( m_fences.empty() == false ) 
@@ -23,14 +23,15 @@ vkwrapper::VkFenceWrapper vkwrapper::MyVkFencePool::GetFence()
 		VkFenceCreateInfo createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
 		createInfo.pNext = nullptr;
-		createInfo.flags = 0;
+		createInfo.flags = 0; /// TODO:: 
 		fence = m_logicalDevice->CreateFence( createInfo,"create fence" );
 	}
 	return fence;
 }
 
-void vkwrapper::MyVkFencePool::DisposeFence( VkFenceWrapper &&fence )
+void vkwrapper::FenceArena::Collect( VkFenceWrapper &&fence )
 {
+	assert(m_logicalDevice->GetFenceStatus(fence) == VK_SUCCESS);
 	m_fences.emplace_back( std::move( fence ) );
 }
 }  // namespace fx

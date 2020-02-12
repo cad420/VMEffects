@@ -18,6 +18,13 @@ public:
 	VkPhysicalDevice GetPhysicalDeviceNativeHandle() const;
 	uint32_t FindMemoryType( uint32_t typeFilter, VkMemoryPropertyFlags properties )const;
 	uint32_t FindQueueFamily( VkQueueFlags QueueFlags ) const;
+
+	const std::vector<VkQueueFamilyProperties> &GetQueueFamiliyProperties()const{return m_queueFamiliyProperties;}
+	const std::vector<VkExtensionProperties> & GetExtensionProperties()const{return m_extensions;}
+	const VkPhysicalDeviceProperties & GetProperties()const{return m_properties;}
+	const VkPhysicalDeviceFeatures & GetFeatures()const{return m_features;}
+	
+
 private :
 
 	VkPhysicalDeviceWrapper( VkPhysicalDevice device );

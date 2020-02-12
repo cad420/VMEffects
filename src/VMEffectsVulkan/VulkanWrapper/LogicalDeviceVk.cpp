@@ -25,7 +25,7 @@ VkQueue VkLogicalDeviceWrapper::GetQueue( uint32_t queueFamilyIndex,
 	uint32_t queueIndex ) const
 {
 	VkQueue queue;
-	vkGetDeviceQueue( m_device, queueFamilyIndex, 0, &queue );
+	vkGetDeviceQueue( m_device, queueFamilyIndex, queueIndex, &queue );
 	return queue;
 }
 
@@ -53,7 +53,6 @@ VkImageViewWrapper VkLogicalDeviceWrapper::CreateVkImageView( const VkImageViewC
 void VkLogicalDeviceWrapper::ReleaseVkObject( VkImageViewWrapper &&vkImageViewWrapper ) const
 {
 	vkDestroyImageView( m_device, vkImageViewWrapper.m_object, m_allocator );
-
 	vkImageViewWrapper.m_object = VK_NULL_HANDLE;
 }
 
@@ -82,6 +81,15 @@ void VkLogicalDeviceWrapper::ReleaseVkObject( VkBufferViewWrapper &&vkBufferView
 VkFenceWrapper VkLogicalDeviceWrapper::CreateFence( const VkFenceCreateInfo &createInfo, const char *dbgInfo ) const
 {
 	return CreateVkObject<VkFence>( vkCreateFence, createInfo, dbgInfo );
+}
+
+VkResult VkLogicalDeviceWrapper::GetFenceStatus(VkFence fence)const
+{
+	return vkGetFenceStatus(m_device,fence);
+}
+
+VkResult VkLogicalDeviceWrapper::WaitForFence(uint32_t fenceCount,const VkFence * fences,VkBool32 all,uint64_t timeout)const{
+	return vkWaitForFences(m_device,fenceCount,fences,all,timeout);
 }
 
 void VkLogicalDeviceWrapper::ReleaseVkObject( VkFenceWrapper &&vk_fence_wrapper ) const
@@ -161,6 +169,7 @@ VkCommandBuffer VkLogicalDeviceWrapper::AllocateCommandBuffer( const VkCommandBu
 	return buffer;
 }
 
+
 VkResult VkLogicalDeviceWrapper::ResetFence( VkFence fence ) const
 {
 	const auto res = vkResetFences( m_device, 1, &fence );
@@ -188,7 +197,7 @@ VkLogicalDeviceWrapper::VkLogicalDeviceWrapper( VkPhysicalDevice device,
 {
 	auto res = vkCreateDevice( device, &ci, m_allocator, &m_device );
 	if ( res != VK_SUCCESS ) {
-		Debug( "Faild to create Vulkan logical device" );
+		vm::Debug( "Faild to create Vulkan logical device" );
 		throw std::runtime_error( "Failed to create Vulkan logical device" );
 	}
 }

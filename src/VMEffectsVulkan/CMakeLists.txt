@@ -2,7 +2,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(VMEffectsVk)
 
-
 find_package(Vulkan REQUIRED)
 
 find_package(glfw3 CONFIG REQUIRED)
@@ -18,5 +17,11 @@ target_include_directories(VMEffectsVk PRIVATE "../VMEffects") # internal header
 target_include_directories(VMEffectsVk PRIVATE ${Vulkan_INCLUDE_DIRS}) # Vulkan SDK headers
 target_include_directories(VMEffectsVk PRIVATE ${glfw_INCLUDE_DIRS})   # glfw headers
 target_include_directories(VMEffectsVk PRIVATE "../../3rdpart/glslang") # glslang headers
-install(TARGETS VMEffectsVk LIBRARY DESTINATION "lib" RUNTIME DESTINATION "bin/backends" ARCHIVE DESTINATION "lib")
+
+if(WIN32)
+install(TARGETS VMEffectsVk LIBRARY DESTINATION "lib" RUNTIME DESTINATION "bin/backends" ARCHIVE DESTINATION "lib/static")
+else()
+install(TARGETS VMEffectsVk LIBRARY DESTINATION "bin/backends" RUNTIME DESTINATION "bin" ARCHIVE DESTINATION "lib/static")
+endif()
+
 install(DIRECTORY "../../include/VMEffectsVulkan" DESTINATION "include")

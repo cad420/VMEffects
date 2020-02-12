@@ -3,8 +3,8 @@
 
 #include <memory>
 #include <vulkan/vulkan.h>
-#include <VMUtils/log.hpp>
 #include <stdexcept>
+#include <VMUtils/log.hpp>
 
 namespace vm
 {
@@ -24,6 +24,7 @@ using VkBufferViewWrapper = VkObjectWrapper<VkBufferView>;
 using VkDeviceMemoryWrapper = VkObjectWrapper<VkDeviceMemory>;
 using VkCommandPoolWrapper = VkObjectWrapper<VkCommandPool>;
 using VkFenceWrapper = VkObjectWrapper<VkFence>;
+
 
 class VkLogicalDeviceWrapper : public std::enable_shared_from_this<VkLogicalDeviceWrapper>
 {
@@ -63,6 +64,12 @@ public:
 	void ReleaseVkObject( VkBufferViewWrapper &&vkBufferViewWrapper ) const;
 
 	VkFenceWrapper CreateFence( const VkFenceCreateInfo &createInfo, const char *dbgInfo ) const;
+	VkResult ResetFence( VkFence fence ) const;
+
+	VkResult GetFenceStatus(VkFence fence)const;
+
+	VkResult WaitForFence(uint32_t fenceCount,const VkFence * fences,VkBool32 all,uint64_t timeout)const;
+
 	void ReleaseVkObject( VkFenceWrapper &&vkFencewrapper ) const;
 
 	void ReleaseVkObject( VkCommandPoolWrapper &&vkCommandPoolWrapper ) const;
@@ -82,7 +89,6 @@ public:
 	VkDeviceMemoryWrapper AllocateDeviceMemory( const VkMemoryAllocateInfo &allocInfo, const char *dbgInfo )const;
 	VkCommandBuffer AllocateCommandBuffer( const VkCommandBufferAllocateInfo &allocInfo, const char *dbgInfo ) const;
 
-	VkResult ResetFence( VkFence fence ) const;
 
 	VkResult MapMemory( VkDeviceMemory devMemory, VkDeviceSize size, VkDeviceSize offset, VkMemoryMapFlags flags, void **data ) const;
 	void UnmapMemory( VkDeviceMemory devMemory ) const;

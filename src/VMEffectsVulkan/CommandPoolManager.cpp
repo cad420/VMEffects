@@ -5,7 +5,7 @@ namespace vm
 {
 namespace fx
 {
-CommandPoolManager::CommandPoolManager( DeviceVkImpl &device, uint32_t queueFamilyIndex, VkCommandPoolCreateFlags flags ) :
+CommandPoolArena::CommandPoolArena( DeviceVkImpl &device, uint32_t queueFamilyIndex, VkCommandPoolCreateFlags flags ) :
   m_device( device ),
   m_queueFamilyIndex( queueFamilyIndex ),
   m_flags( flags )
@@ -13,8 +13,7 @@ CommandPoolManager::CommandPoolManager( DeviceVkImpl &device, uint32_t queueFami
 
 }
 
-
-VkCommandPoolWrapper CommandPoolManager::AllocateCommandPool( const char *dbgInfo )
+VkCommandPoolWrapper CommandPoolArena::AllocateCommandPool( const char *dbgInfo )
 {
 	std::lock_guard<std::mutex> lk( m_mtx );
 	VkCommandPoolWrapper cmdPool;
@@ -39,13 +38,13 @@ VkCommandPoolWrapper CommandPoolManager::AllocateCommandPool( const char *dbgInf
 	return std::move( cmdPool );
 }
 
-void CommandPoolManager::ReleaseCommandPool( VkCommandPoolWrapper cmdPool, uint32_t cmdQueueIndex, uint64_t fenceValue )
+void CommandPoolArena::ReleaseCommandPool( VkCommandPoolWrapper cmdPool, uint32_t cmdQueueIndex, uint64_t fenceValue )
 {
 	std::lock_guard<std::mutex> lk( m_mtx );
 	m_cmdPools.emplace_back( std::move( cmdPool ) );
 }
 
-void CommandPoolManager::DestroyPools()
+void CommandPoolArena::DestroyPools()
 {
 	std::lock_guard<std::mutex> lk( m_mtx );
 	m_cmdPools.clear();

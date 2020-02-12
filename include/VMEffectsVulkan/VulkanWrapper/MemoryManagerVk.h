@@ -124,7 +124,7 @@ private:
 	std::mutex m_mtx;
     MemoryAllocationTracker m_tracker;
 	VkDeviceMemoryWrapper m_gpuMemory;
-	void *m_cpuMemory = nullptr;
+	void * m_cpuMemory = nullptr;
 };
 
 class VulkanMemoryArena

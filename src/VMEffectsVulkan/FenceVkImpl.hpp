@@ -3,6 +3,7 @@
 
 #include <FenceBase.hpp>
 
+#include <VMUtils/ieverything.hpp>
 #include <VMEffectsVulkan/IFenceVk.h>
 #include "DeviceVkImpl.hpp"
 #include <VMEffectsVulkan/VulkanWrapper/LogicalDevickVk.h>
@@ -14,12 +15,10 @@ namespace vm
 namespace fx
 {
 using namespace vkwrapper;
-class FenceVkImpl : public FenceBase<IFenceVk, DeviceVkImpl, FenceDesc>
+class FenceVkImpl : public EverythingBase<IFenceVk>
 {
 public:
 	FenceVkImpl( IRefCnt *cnt, DeviceVkImpl *device, const FenceDesc &desc );
-
-	~FenceVkImpl();
 
 	uint64_t GetCompletedValue() override final;
 
@@ -35,12 +34,16 @@ public:
 		m_pendingFences.emplace_back( fenceValue, std::move( fence ) );
 	}
 
-	void Wait();
+	void Wait(uint64_t fenceValue);
+
+	~FenceVkImpl();
 
 private:
-	MyVkFencePool m_fencePool;
+	FenceArena m_fencePool;
 	std::deque<std::pair<uint64_t, VkFenceWrapper>> m_pendingFences;
 	volatile uint64_t m_lastCompletedFenceValue = 0;
+	DeviceVkImpl * m_device = nullptr;
+	FenceDesc m_desc;
 };
 //
 }  // namespace fx

@@ -8,13 +8,13 @@ namespace fx
 {
 namespace vkwrapper
 {
-class MyVkFencePool : NoCopy, NoMove
+class FenceArena: NoCopy, NoMove
 {
 public:
-	MyVkFencePool( std::shared_ptr<const VkLogicalDeviceWrapper> logicalDevice );
-	~MyVkFencePool() = default;
+	FenceArena( std::shared_ptr<const VkLogicalDeviceWrapper> logicalDevice );
+	~FenceArena() = default;
 	VkFenceWrapper GetFence();
-	void DisposeFence( VkFenceWrapper && fence );
+	void Collect( VkFenceWrapper && fence );
 private:
 	std::shared_ptr<const VkLogicalDeviceWrapper> m_logicalDevice;
 	std::vector<VkFenceWrapper> m_fences;

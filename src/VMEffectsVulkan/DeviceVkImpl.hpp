@@ -8,6 +8,7 @@
 #include <VMEffectsVulkan/VulkanWrapper/PhysicalDeviceVk.h>
 #include <DeviceBase.hpp>
 #include <VMEffectsVulkan/VulkanWrapper/MemoryManagerVk.h>
+
 #include "CommandPoolManager.hpp"
 namespace vm
 {
@@ -103,13 +104,11 @@ private:
 	std::shared_ptr<InstanceVkWrapper> m_instance;
 	std::unique_ptr<VkPhysicalDeviceWrapper> m_physicalDevice;
 	std::shared_ptr<VkLogicalDeviceWrapper> m_logicalDevice;
+
 	VulkanMemoryArena m_deviceMemoryManager;
 
-
 	// used to copy buffer and texture
-
 	CommandPoolManager m_transientCmdPoolManager;
-	
 };
 }  // namespace fx
 }  // namespace vm

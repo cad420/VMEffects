@@ -44,30 +44,34 @@ uint32_t VkPhysicalDeviceWrapper::FindQueueFamily( VkQueueFlags QueueFlags ) con
 		{
 			return i;
 		}
-
-		// query the support for surface present queue
-
-		//VkBool32 presentSupport = false;
-		//vkGetPhysicalDeviceSurfaceSupportKHR( m_device, i, m_surface, &presentSupport );
-		//if ( que.queueCount > 0 && presentSupport ) {
-		//	m_queueFamilyIndex.presentFamiliy = i;
-		//}
 	}
 	return VK_DEVICE_QUEUE_CREATE_FLAG_BITS_MAX_ENUM;
 }
+
 
 VkPhysicalDeviceWrapper::VkPhysicalDeviceWrapper( VkPhysicalDevice device ):m_device( device )
 {
 	
 	vkGetPhysicalDeviceProperties( m_device, &m_properties );
 	vkGetPhysicalDeviceFeatures( m_device, &m_features );
-	
 	vkGetPhysicalDeviceMemoryProperties( m_device, &m_memoryProperties );
 	
+	//
 	uint32_t queueFamilyCount = 0;
 	vkGetPhysicalDeviceQueueFamilyProperties( m_device, &queueFamilyCount, nullptr );
 	m_queueFamiliyProperties.resize( queueFamilyCount );
 	vkGetPhysicalDeviceQueueFamilyProperties( m_device, &queueFamilyCount, m_queueFamiliyProperties.data() );
+
+	// Get Extensions Support
+	uint32_t extensionCount = 0;
+	vkEnumerateDeviceExtensionProperties(m_device,nullptr,&extensionCount,nullptr);
+	if(extensionCount > 0){
+		m_extensions.resize(extensionCount);
+		const auto ret = vkEnumerateDeviceExtensionProperties(m_device,nullptr,&extensionCount,m_extensions.data());
+		if(ret != VK_SUCCESS){
+			throw std::runtime_error("This physical device does not support any extension.");
+		}
+	}
 	
 }
 
